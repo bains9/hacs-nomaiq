@@ -1,43 +1,39 @@
-# Noma IQ HACS integration
+# NOMA iQ for Home Assistant
 
-## About
+An expanded fork of the unofficial NOMA iQ Home Assistant integration, using the Ayla IoT cloud.
 
-This integration exposes devices from the Noma IQ app. For now, only the current devices have been tested:
+## Tested ceiling-fan support
 
-- Garage Door Opener
-- Garage Door Opener's Light
+- Independent fan and light control
+- Six fan-speed levels
+- Forward and reverse direction
+- Light brightness
+- Five-step light colour temperature through Home Assistant's standard warmth control
+
+The NOMA fan's native `light_color_index` values are mapped as follows:
+
+| Native index | Home Assistant value |
+| --- | --- |
+| 1 | 2700 K (warmest) |
+| 2 | 3500 K |
+| 3 | 4000 K |
+| 4 | 5000 K |
+| 5 | 6500 K (coolest) |
+
+Intermediate Kelvin selections snap to the nearest supported position.
+
+## Other integration features
+
+This working snapshot also includes dynamic device-property mappings, adoption support for unknown models, diagnostic sensors, repair reporting, and mapped entity platforms.
 
 ## Installation
 
-Installation is done like any other Home Assistant HACS integration.
+Install as a custom repository through HACS, restart Home Assistant, and add the NOMA iQ integration using the credentials from the NOMA iQ app.
 
-### Requirements
+## Status
 
-In order to setup this integration you will need:
+Ceiling-fan functionality was validated on Home Assistant 2026.8.3 with a NOMA iQ 52-inch smart ceiling fan. Other device models may expose different Ayla properties and should be tested independently.
 
-- A Home Assistant instance with [HACS](https://hacs.xyz/) installed.
+## Attribution
 
-### HACS Installation
-
-Click the button below:
-
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mnfjorge&repository=https%3A%2F%2Fgithub.com%2Fmnfjorge%2Fhacs-nomaiq&category=integration)
-
-Or search for "Noma IQ" in the HACS store. If you don't see it there, you can [add this repository url as a HACS custom repository](https://hacs.xyz/docs/faq/custom_repositories).
-
-## Home Assistant Integration
-
-[![Open your Home Assistant instance and start setting up a new integration of a specific brand.](https://my.home-assistant.io/badges/brand.svg)](https://my.home-assistant.io/redirect/brand/?brand=+Noma+IQ)
-
-After installation, setup the integration via the web UI like any other integration. When prompted, provide the following:
-
-- Username: your username to log into the Noma IQ app
-- Password: your password to log into the Noma IQ app
-
-### Troubleshooting
-
-If you are having issues connecting, make sure your credentials are correct using the Noma IQ in your mobile app. If you're still having trouble, you can open a new issue here: https://github.com/mnfjorge/hacs-nomaiq/issues/new
-
-## Contributions
-
-Contributions are welcome!
+Forked from [`mnfjorge/hacs-nomaiq`](https://github.com/mnfjorge/hacs-nomaiq). This project remains unofficial and is not affiliated with NOMA, Canadian Tire, Ayla Networks, or Home Assistant.
