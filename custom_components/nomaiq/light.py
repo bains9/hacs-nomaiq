@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
 import ayla_iot_unofficial.device
@@ -160,7 +161,31 @@ class NomaIQLightEntity(NomaIQEntity, LightEntity):
             )
         }
 
+    async def _async_wake_fan_controller(self) -> None:
+        """Wake a ceiling-fan controller before sending a light command.
+
+        Some controllers stop accepting cloud light commands after they have
+        been idle, while a fan command makes the light channel responsive
+        again. Re-sending the current fan state avoids changing the motor.
+        """
+        device = self._current_device or self._device
+        if (
+            "fan_control" not in device.properties_full
+            or "fan_speed" not in device.properties_full
+        ):
+            return
+
+        current_state = int(
+            bool(device.get_property_value("fan_control"))
+        )
+        await device.async_set_property_value(
+            "fan_control",
+            current_state,
+        )
+        await asyncio.sleep(0.25)
+
     async def async_turn_on(self, **kwargs: Any) -> None:
+        await self._async_wake_fan_controller()
         await self._device.async_set_property_value(
             "light_control",
             1,
@@ -197,6 +222,7 @@ class NomaIQLightEntity(NomaIQEntity, LightEntity):
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
+        await self._async_wake_fan_controller()
         await self._device.async_set_property_value(
             "light_control",
             0,
